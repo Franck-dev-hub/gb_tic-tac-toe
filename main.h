@@ -1,10 +1,6 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <gb/gb.h>
-#include <gbdk/console.h>
-#include <stdio.h>
-
 #define GAME_BOARD_CELL_EMPTY ' '
 #define GAME_BOARD_CELL_PLAYER 'x'
 #define GAME_BOARD_CELL_COMPUTER 'o'
@@ -14,10 +10,6 @@
 #define GAME_STATUS_LOST 2
 #define GAME_STATUS_DRAW 3
 
-/* ===== Title screen ===== */
-void title_screen(void);
-
-/* ===== Game prototypes ===== */
 /* Draws */
 void game_draw_cursor(UINT8 cursor_char);
 void game_draw_state(void);

@@ -1,10 +1,23 @@
-#include "main.h"
-#include "helpers.h"
+/* ===== INCLUDES ===== */
+/* Native */
+#include <stdio.h>
 
+/* gbdk 2020*/
+#include <gb/gb.h>
+#include <gbdk/console.h>
+
+/* Custom */
+#include "helpers.h"
+#include "main.h"
+#include "screen_title.h"
+
+/* ===== GLOBALS ===== */
 UINT8 GAME_BOARD[9];
 UINT8 GAME_CURSOR_X;
 UINT8 GAME_CURSOR_Y;
 
+/* ===== GAME FUNCS ===== */
+/* Check if the game is won, lost or a draw */
 UINT8 game_check_status(void)
 {
 	UINT8 x, y, i, player_score, computer_score;
@@ -118,6 +131,7 @@ UINT8 game_check_status(void)
 	return (GAME_STATUS_PLAYING);
 }
 
+/* Draw a cursor for the player */
 void game_draw_cursor(UINT8 cursor_char)
 {
 	UINT8 graph_x = 4 + GAME_CURSOR_X * 4 + 1;
@@ -137,6 +151,7 @@ void game_draw_cursor(UINT8 cursor_char)
 	}
 }
 
+/* Main computer AI */
 void game_computer_play(void)
 {
 	UINT8 x, y, i, player_score, computer_score, last_empty_cell;
@@ -293,6 +308,7 @@ void game_computer_play(void)
 	}
 }
 
+/* Handle main player commands */
 void game_player_play(void)
 {
 	UINT8 key, i;
@@ -324,6 +340,7 @@ void game_player_play(void)
 	}
 }
 
+/* Init game board */
 void game_init(void)
 {
 	UINT8 i;
@@ -335,6 +352,7 @@ void game_init(void)
 	GAME_CURSOR_Y = 1;
 }
 
+/* Check game draw state */
 void game_draw_state(void)
 {
 	UINT8 i, x, y, graph_x, graph_y;
@@ -352,6 +370,7 @@ void game_draw_state(void)
 	}
 }
 
+/* Display game board */
 void game_draw_board(void)
 {
 	clear_screen();
@@ -375,18 +394,7 @@ void game_draw_board(void)
 	printf("       |   |   \n");
 }
 
-void title_screen(void)
-{
-	clear_screen();
-	gotoxy(4, 5);
-	printf("Tic Tac Toe");
-
-	gotoxy(3, 15);
-	printf("- Press START -");
-	waitpad(J_START);
-	waitpadup();
-}
-
+/* Draw game board */
 void game_draw_game_over(UINT8 status)
 {
 	clear_line(1);
@@ -412,6 +420,7 @@ void game_draw_game_over(UINT8 status)
 	waitpadup();
 }
 
+/* Main game loop */
 void game(void)
 {
 	UINT8 status;
@@ -438,6 +447,7 @@ void game(void)
 	game_draw_game_over(status);
 }
 
+/* Main loop */
 void main(void)
 {
 	while (1)

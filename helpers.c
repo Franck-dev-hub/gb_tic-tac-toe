@@ -1,4 +1,8 @@
+/* ===== INCLUDES ===== */
+/* gbdk 2020*/
 #include <gbdk/console.h>
+
+/* Custom */
 #include "helpers.h"
 
 UINT8 coord_2d_to_1d(UINT8 x, UINT8 y)
