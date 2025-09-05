@@ -1,19 +1,8 @@
-#include <gb/gb.h>
-#include <gbdk/console.h>
-#include <stdio.h>
+#include "main.h"
 
 UINT8 GAME_BOARD[9];
 UINT8 GAME_CURSOR_X;
 UINT8 GAME_CURSOR_Y;
-
-#define GAME_BOARD_CELL_EMPTY ' '
-#define GAME_BOARD_CELL_PLAYER 'x'
-#define GAME_BOARD_CELL_COMPUTER 'o'
-
-#define GAME_STATUS_PLAYING 0
-#define GAME_STATUS_WON 1
-#define GAME_STATUS_LOST 2
-#define GAME_STATUS_DRAW 3
 
 UINT8 coord_2d_to_1d(UINT8 x, UINT8 y)
 {
