@@ -34,6 +34,37 @@ void game_draw_cursor(UINT8 cursor_char)
 	}
 }
 
+void game_player_play(void)
+{
+	UINT8 key, i;
+
+	while (1)
+	{
+		game_draw_cursor('/');
+		key = waitpad(J_UP | J_DOWN | J_LEFT | J_RIGHT | J_A);
+		game_draw_cursor(' ');
+
+		if (key & J_UP && GAME_CURSOR_Y != 0)
+			GAME_CURSOR_Y -= 1;
+		if (key & J_DOWN && GAME_CURSOR_Y != 2)
+			GAME_CURSOR_Y += 1;
+		if (key & J_LEFT && GAME_CURSOR_X != 0)
+			GAME_CURSOR_X -= 1;
+		if (key & J_RIGHT && GAME_CURSOR_X != 2)
+			GAME_CURSOR_X += 1;
+		if (key & J_A)
+		{
+			i = coord_2d_to_1d(GAME_CURSOR_X, GAME_CURSOR_Y);
+			if (GAME_BOARD[i] == GAME_BOARD_CELL_EMPTY)
+			{
+				GAME_BOARD[i] = GAME_BOARD_CELL_PLAYER;
+				break;
+			}
+		}
+		waitpadup();
+	}
+}
+
 void game_init(void)
 {
 	UINT8 i;
@@ -119,7 +150,11 @@ void game(void)
 	game_init();
 	game_draw_board();
 
-	game_draw_cursor('/');
+	while (1)
+	{
+		game_player_play();
+		game_draw_state();
+	}
 }
 
 void main(void)
