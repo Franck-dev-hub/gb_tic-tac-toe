@@ -25,7 +25,7 @@ UINT8 game_check_status(void)
 	UINT8 x, y, i, player_score, computer_score;
 	UINT8 empty_cell = 0;
 
-	/* Check line score */
+	/* Check row score */
 	for (y = 0; y < 3; y += 1)
 	{
 		player_score   = 0;
@@ -52,7 +52,7 @@ UINT8 game_check_status(void)
 			return (GAME_STATUS_LOST);
 	}
 
-	/* Check row score */
+	/* Check column score */
 	for (x = 0; x < 3; x += 1)
 	{
 		player_score   = 0;
@@ -166,14 +166,156 @@ void game_draw_cursor(UINT8 cursor_char)
 
 void game_computer_play(void)
 {
-	UINT8 i;
+	UINT8 x, y, i, player_score, computer_score, last_empty_cell;
+	INT8  loose_cell = -1;
+	INT8  found_empty;
 
-	for (i = 0; i < 9; i += 1)
+	/* Check rows */
+	for (y = 0; y < 3; y++)
+	{
+		player_score   = 0;
+		computer_score = 0;
+		found_empty    = 0;
+
+		for (x = 0; x < 3; x++)
+		{
+			i = coord_2d_to_1d(x, y);
+			switch (GAME_BOARD[i])
+			{
+				case GAME_BOARD_CELL_EMPTY:
+					last_empty_cell = i;
+					found_empty	= 1;
+					break;
+				case GAME_BOARD_CELL_PLAYER:
+					player_score++;
+					break;
+				case GAME_BOARD_CELL_COMPUTER:
+					computer_score++;
+					break;
+			}
+		}
+
+		if (computer_score == 2 && player_score == 0 && found_empty)
+		{
+			GAME_BOARD[last_empty_cell] = GAME_BOARD_CELL_COMPUTER;
+			return;
+		}
+		if (player_score == 2 && computer_score == 0 && found_empty)
+			loose_cell = last_empty_cell;
+	}
+
+	/* Check columns */
+	for (x = 0; x < 3; x++)
+	{
+		player_score   = 0;
+		computer_score = 0;
+		found_empty    = 0;
+
+		for (y = 0; y < 3; y++)
+		{
+			i = coord_2d_to_1d(x, y);
+			switch (GAME_BOARD[i])
+			{
+				case GAME_BOARD_CELL_EMPTY:
+					last_empty_cell = i;
+					found_empty	= 1;
+					break;
+				case GAME_BOARD_CELL_PLAYER:
+					player_score++;
+					break;
+				case GAME_BOARD_CELL_COMPUTER:
+					computer_score++;
+					break;
+			}
+		}
+
+		if (computer_score == 2 && player_score == 0 && found_empty)
+		{
+			GAME_BOARD[last_empty_cell] = GAME_BOARD_CELL_COMPUTER;
+			return;
+		}
+		if (player_score == 2 && computer_score == 0 && found_empty)
+			loose_cell = last_empty_cell;
+	}
+
+	/* First diagonal check */
+	player_score   = 0;
+	computer_score = 0;
+	found_empty    = 0;
+
+	for (x = 0; x < 3; x++)
+	{
+		y = x;
+		i = coord_2d_to_1d(x, y);
+		switch (GAME_BOARD[i])
+		{
+			case GAME_BOARD_CELL_EMPTY:
+				last_empty_cell = i;
+				found_empty	= 1;
+				break;
+			case GAME_BOARD_CELL_PLAYER:
+				player_score++;
+				break;
+			case GAME_BOARD_CELL_COMPUTER:
+				computer_score++;
+				break;
+		}
+	}
+
+	if (computer_score == 2 && player_score == 0 && found_empty)
+	{
+		GAME_BOARD[last_empty_cell] = GAME_BOARD_CELL_COMPUTER;
+		return;
+	}
+	if (player_score == 2 && computer_score == 0 && found_empty)
+		loose_cell = last_empty_cell;
+
+	/* Second diagonal check */
+	player_score   = 0;
+	computer_score = 0;
+	found_empty    = 0;
+
+	for (x = 0; x < 3; x++)
+	{
+		y = 2 - x;
+		i = coord_2d_to_1d(x, y);
+		switch (GAME_BOARD[i])
+		{
+			case GAME_BOARD_CELL_EMPTY:
+				last_empty_cell = i;
+				found_empty	= 1;
+				break;
+			case GAME_BOARD_CELL_PLAYER:
+				player_score++;
+				break;
+			case GAME_BOARD_CELL_COMPUTER:
+				computer_score++;
+				break;
+		}
+	}
+
+	if (computer_score == 2 && player_score == 0 && found_empty)
+	{
+		GAME_BOARD[last_empty_cell] = GAME_BOARD_CELL_COMPUTER;
+		return;
+	}
+	if (player_score == 2 && computer_score == 0 && found_empty)
+		loose_cell = last_empty_cell;
+
+	/* If computer has to block player */
+	if (loose_cell != -1)
+	{
+		GAME_BOARD[loose_cell] = GAME_BOARD_CELL_COMPUTER;
+		return;
+	}
+
+	/* Play */
+	for (i = 0; i < 9; i++)
 	{
 		if (GAME_BOARD[i] == GAME_BOARD_CELL_EMPTY)
 		{
 			GAME_BOARD[i] = GAME_BOARD_CELL_COMPUTER;
-			break;
+			return;
 		}
 	}
 }
