@@ -1,6 +1,17 @@
-#include <stdio.h>
 #include <gb/gb.h>
 #include <gbdk/console.h>
+#include <stdio.h>
+
+UINT8 GAME_BOARD[9];
+
+#define GAME_BOARD_CELL_EMPTY ' '
+#define GAME_BOARD_CELL_PLAYER 'x'
+#define GAME_BOARD_CELL_COMPUTER 'o'
+
+UINT8 coord_2d_to_1d(UINT8 x, UINT8 y)
+{
+	return (y * 3 + x);
+}
 
 void title_screen(void)
 {
@@ -12,6 +23,14 @@ void title_screen(void)
 	printf("- Press START -");
 	waitpad(J_START);
 	waitpadup();
+}
+
+void game_init(void)
+{
+	UINT8 i;
+
+	for (i = 0; i < 9; i += 1)
+		GAME_BOARD[i] = GAME_BOARD_CELL_EMPTY;
 }
 
 void clear_screen(void)
@@ -54,12 +73,18 @@ void game_draw_board(void)
 	printf("       |   |   \n");
 }
 
+void game(void)
+{
+	game_init();
+	game_draw_board();
+}
+
 void main(void)
 {
 	while (1)
 	{
 		title_screen();
-		game_draw_board();
+		game();
 
 		waitpad(J_START);
 		waitpadup();
