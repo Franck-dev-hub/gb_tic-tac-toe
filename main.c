@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 UINT8 GAME_BOARD[9];
+UINT8 GAME_CURSOR_X;
+UINT8 GAME_CURSOR_Y;
 
 #define GAME_BOARD_CELL_EMPTY ' '
 #define GAME_BOARD_CELL_PLAYER 'x'
@@ -13,16 +15,23 @@ UINT8 coord_2d_to_1d(UINT8 x, UINT8 y)
 	return (y * 3 + x);
 }
 
-void title_screen(void)
+void game_draw_cursor(UINT8 cursor_char)
 {
-	clear_screen();
-	gotoxy(4, 5);
-	printf("Tic Tac Toe");
+	UINT8 graph_x = 4 + GAME_CURSOR_X * 4 + 1;
+	UINT8 graph_y = 4 + GAME_CURSOR_Y * 4 + 1;
+	UINT8 cx, cy;
 
-	gotoxy(3, 15);
-	printf("- Press START -");
-	waitpad(J_START);
-	waitpadup();
+	for (cy = graph_y - 1; cy <= graph_y + 1; cy += 1)
+	{
+		for (cx = graph_x - 1; cx <= graph_x + 1; cx += 1)
+		{
+			if (cx == graph_x && cy == graph_y)
+				continue;
+
+			gotoxy(cx, cy);
+			setchar(cursor_char);
+		}
+	}
 }
 
 void game_init(void)
@@ -31,6 +40,9 @@ void game_init(void)
 
 	for (i = 0; i < 9; i += 1)
 		GAME_BOARD[i] = GAME_BOARD_CELL_EMPTY;
+
+	GAME_CURSOR_X = 1;
+	GAME_CURSOR_Y = 1;
 }
 
 void clear_screen(void)
@@ -90,14 +102,24 @@ void game_draw_board(void)
 	printf("       |   |   \n");
 }
 
+void title_screen(void)
+{
+	clear_screen();
+	gotoxy(4, 5);
+	printf("Tic Tac Toe");
+
+	gotoxy(3, 15);
+	printf("- Press START -");
+	waitpad(J_START);
+	waitpadup();
+}
+
 void game(void)
 {
 	game_init();
 	game_draw_board();
 
-	GAME_BOARD[0] = GAME_BOARD_CELL_COMPUTER;
-	GAME_BOARD[4] = GAME_BOARD_CELL_PLAYER;
-	game_draw_state();
+	game_draw_cursor('/');
 }
 
 void main(void)
