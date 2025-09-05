@@ -1,0 +1,9 @@
+# lcc objects
+*.o
+*.asm
+*.lst
+*.sym
+*.ihx
+
+# For the moment, ignore gb executable
+*.gb

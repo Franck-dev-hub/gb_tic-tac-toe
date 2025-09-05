@@ -1,0 +1,39 @@
+# Language
+BasedOnStyle: LLVM
+
+# Indentation
+IndentWidth: 8
+ContinuationIndentWidth: 8
+UseTab: Always
+IndentCaseLabels: true
+IndentPPDirectives: None
+
+# Row length
+ColumnLimit: 80
+BreakBeforeBinaryOperators: All
+BinPackArguments: true
+BinPackParameters: true
+
+# Braces
+BreakBeforeBraces: Allman # Linux
+AllowShortIfStatementsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+
+# Spaces / ponctuation
+PointerAlignment: Left
+SpaceBeforeParens: ControlStatements
+SpacesInParentheses: false
+SpaceAfterCStyleCast: false
+
+# Alignment
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignOperands: true
+
+# Includes
+SortIncludes: true
+IncludeBlocks: Regroup
+
+# Comments
+ReflowComments: true
+KeepEmptyLinesAtTheStartOfBlocks: false
