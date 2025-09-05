@@ -10,9 +10,127 @@ UINT8 GAME_CURSOR_Y;
 #define GAME_BOARD_CELL_PLAYER 'x'
 #define GAME_BOARD_CELL_COMPUTER 'o'
 
+#define GAME_STATUS_PLAYING 0
+#define GAME_STATUS_WON 1
+#define GAME_STATUS_LOST 2
+#define GAME_STATUS_DRAW 3
+
 UINT8 coord_2d_to_1d(UINT8 x, UINT8 y)
 {
 	return (y * 3 + x);
+}
+
+UINT8 game_check_status(void)
+{
+	UINT8 x, y, i, player_score, computer_score;
+	UINT8 empty_cell = 0;
+
+	/* Check line score */
+	for (y = 0; y < 3; y += 1)
+	{
+		player_score   = 0;
+		computer_score = 0;
+		for (x = 0; x < 3; x += 1)
+		{
+			i = coord_2d_to_1d(x, y);
+			switch (GAME_BOARD[i])
+			{
+				case GAME_BOARD_CELL_EMPTY:
+					empty_cell = 1;
+					break;
+				case GAME_BOARD_CELL_PLAYER:
+					player_score += 1;
+					break;
+				case GAME_BOARD_CELL_COMPUTER:
+					computer_score += 1;
+					break;
+			}
+		}
+		if (player_score == 3)
+			return (GAME_STATUS_WON);
+		if (computer_score == 3)
+			return (GAME_STATUS_LOST);
+	}
+
+	/* Check row score */
+	for (x = 0; x < 3; x += 1)
+	{
+		player_score   = 0;
+		computer_score = 0;
+		for (y = 0; y < 3; y += 1)
+		{
+			i = coord_2d_to_1d(x, y);
+			switch (GAME_BOARD[i])
+			{
+				case GAME_BOARD_CELL_PLAYER:
+					player_score += 1;
+					break;
+				case GAME_BOARD_CELL_COMPUTER:
+					computer_score += 1;
+					break;
+			}
+		}
+		if (player_score == 3)
+		{
+			return (GAME_STATUS_WON);
+		}
+		if (computer_score == 3)
+		{
+			return (GAME_STATUS_LOST);
+		}
+	}
+
+	/* Check first diagonal score */
+	player_score   = 0;
+	computer_score = 0;
+	for (x = 0; x < 3; x += 1)
+	{
+		y = x;
+		i = coord_2d_to_1d(x, y);
+		switch (GAME_BOARD[i])
+		{
+			case GAME_BOARD_CELL_PLAYER:
+				player_score += 1;
+				break;
+			case GAME_BOARD_CELL_COMPUTER:
+				computer_score += 1;
+				break;
+		}
+	}
+	if (player_score == 3)
+		return (GAME_STATUS_WON);
+	if (computer_score == 3)
+		return (GAME_STATUS_LOST);
+
+	/* Check second diagonal score */
+	player_score   = 0;
+	computer_score = 0;
+	for (x = 0; x < 3; x += 1)
+	{
+		y = 2 - x;
+		i = coord_2d_to_1d(x, y);
+		switch (GAME_BOARD[i])
+		{
+			case GAME_BOARD_CELL_PLAYER:
+				player_score += 1;
+				break;
+			case GAME_BOARD_CELL_COMPUTER:
+				computer_score += 1;
+				break;
+		}
+	}
+	if (player_score == 3)
+		return (GAME_STATUS_WON);
+	if (computer_score == 3)
+		return (GAME_STATUS_LOST);
+
+	/* Check if it's a draw or if the game continue */
+	if (empty_cell)
+		return (GAME_STATUS_PLAYING);
+	else
+		return (GAME_STATUS_DRAW);
+
+	return (GAME_STATUS_PLAYING);
 }
 
 void game_draw_cursor(UINT8 cursor_char)
@@ -161,6 +279,8 @@ void title_screen(void)
 
 void game(void)
 {
+	UINT8 status;
+
 	game_init();
 	game_draw_board();
 
@@ -169,10 +289,16 @@ void game(void)
 		/* Player turn */
 		game_player_play();
 		game_draw_state();
+		status = game_check_status();
+		if (status != GAME_STATUS_PLAYING)
+			break;
 
 		/* Computer turn */
 		game_computer_play();
 		game_draw_state();
+		status = game_check_status();
+		if (status != GAME_STATUS_PLAYING)
+			break;
 	}
 }
 
