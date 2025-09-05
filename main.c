@@ -133,6 +133,18 @@ UINT8 game_check_status(void)
 	return (GAME_STATUS_PLAYING);
 }
 
+void clear_line(UINT8 y)
+{
+	UINT8 x = 20;
+
+	while (x)
+	{
+		x -= 1;
+		gotoxy(x, y);
+		setchar(' ');
+	}
+}
+
 void game_draw_cursor(UINT8 cursor_char)
 {
 	UINT8 graph_x = 4 + GAME_CURSOR_X * 4 + 1;
@@ -277,6 +289,31 @@ void title_screen(void)
 	waitpadup();
 }
 
+void game_draw_game_over(UINT8 status)
+{
+	clear_line(1);
+	switch (status)
+	{
+		case GAME_STATUS_WON:
+			gotoxy(4, 1);
+			printf("YOU WON !");
+			break;
+		case GAME_STATUS_LOST:
+			gotoxy(4, 1);
+			printf("YOU LOST ...");
+			break;
+		case GAME_STATUS_DRAW:
+			gotoxy(5, 1);
+			printf(" -DRAW-");
+			break;
+	}
+	clear_line(17);
+	gotoxy(2, 17);
+	printf("- Press START -");
+	waitpad(J_START);
+	waitpadup();
+}
+
 void game(void)
 {
 	UINT8 status;
@@ -300,6 +337,7 @@ void game(void)
 		if (status != GAME_STATUS_PLAYING)
 			break;
 	}
+	game_draw_game_over(status);
 }
 
 void main(void)
