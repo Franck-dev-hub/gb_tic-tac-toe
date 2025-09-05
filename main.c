@@ -34,6 +34,20 @@ void game_draw_cursor(UINT8 cursor_char)
 	}
 }
 
+void game_computer_play(void)
+{
+	UINT8 i;
+
+	for (i = 0; i < 9; i += 1)
+	{
+		if (GAME_BOARD[i] == GAME_BOARD_CELL_EMPTY)
+		{
+			GAME_BOARD[i] = GAME_BOARD_CELL_COMPUTER;
+			break;
+		}
+	}
+}
+
 void game_player_play(void)
 {
 	UINT8 key, i;
@@ -152,7 +166,12 @@ void game(void)
 
 	while (1)
 	{
+		/* Player turn */
 		game_player_play();
+		game_draw_state();
+
+		/* Computer turn */
+		game_computer_play();
 		game_draw_state();
 	}
 }
