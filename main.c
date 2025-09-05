@@ -1,13 +1,9 @@
 #include "main.h"
+#include "helpers.h"
 
 UINT8 GAME_BOARD[9];
 UINT8 GAME_CURSOR_X;
 UINT8 GAME_CURSOR_Y;
-
-UINT8 coord_2d_to_1d(UINT8 x, UINT8 y)
-{
-	return (y * 3 + x);
-}
 
 UINT8 game_check_status(void)
 {
@@ -120,18 +116,6 @@ UINT8 game_check_status(void)
 		return (GAME_STATUS_DRAW);
 
 	return (GAME_STATUS_PLAYING);
-}
-
-void clear_line(UINT8 y)
-{
-	UINT8 x = 20;
-
-	while (x)
-	{
-		x -= 1;
-		gotoxy(x, y);
-		setchar(' ');
-	}
 }
 
 void game_draw_cursor(UINT8 cursor_char)
@@ -349,23 +333,6 @@ void game_init(void)
 
 	GAME_CURSOR_X = 1;
 	GAME_CURSOR_Y = 1;
-}
-
-void clear_screen(void)
-{
-	UINT8 x;
-	UINT8 y = 18;
-	while (y)
-	{
-		y -= 1;
-		x = 20;
-		while (x)
-		{
-			x -= 1;
-			gotoxy(x, y);
-			setchar(' ');
-		}
-	}
 }
 
 void game_draw_state(void)

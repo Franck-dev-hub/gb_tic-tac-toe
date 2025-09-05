@@ -14,20 +14,21 @@
 #define GAME_STATUS_LOST 2
 #define GAME_STATUS_DRAW 3
 
-UINT8 coor_2d_to_1d(UINT8 x, UINT8 y);
-UINT8 game_check_status(void);
+/* ===== Title screen ===== */
+void title_screen(void);
 
-void clear_line(UINT8 y);
+/* ===== Game prototypes ===== */
+/* Draws */
 void game_draw_cursor(UINT8 cursor_char);
-void game_computer_play(void);
-void game_player_play(void);
-void game_init(void);
-void clear_screen(void);
 void game_draw_state(void);
 void game_draw_board(void);
-void title_screen(void);
 void game_draw_game_over(UINT8 status);
-void game(void);
-void main(void);
+
+/* Gameplay */
+UINT8 game_check_status(void);
+void  game_computer_play(void);
+void  game_player_play(void);
+void  game_init(void);
+void  game(void);
 
 #endif
